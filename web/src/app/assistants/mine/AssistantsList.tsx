@@ -13,14 +13,15 @@ import {
   FiSearch,
   FiX,
   FiShare2,
-  FiImage,
 } from "react-icons/fi";
 import Link from "next/link";
 import { orderAssistantsForUser } from "@/lib/assistants/orderAssistants";
 import {
   addAssistantToList,
+  moveAssistantDown,
   moveAssistantUp,
   removeAssistantFromList,
+  updateUserAssistantList,
 } from "@/lib/assistants/updateAssistantPreferences";
 import { AssistantIcon } from "@/components/assistants/AssistantIcon";
 import { DefaultPopover } from "@/components/popover/DefaultPopover";
@@ -132,7 +133,6 @@ function AssistantListItem({
       >
         <div
           className="
-          
           flex
           justify-between
           items-center
@@ -311,58 +311,13 @@ function AssistantListItem({
   );
 }
 
-interface AssistantsListProps {
+export function AssistantsList({
+  user,
+  assistants,
+}: {
   user: User | null;
   assistants: Persona[];
-}
-
-export async function updateAssistantOrder(
-  newOrder: number[]
-): Promise<boolean> {
-  try {
-    const response = await fetch("/api/user/assistant-list", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ chosen_assistants: newOrder }),
-    });
-    return response.ok;
-  } catch (error) {
-    console.error("Failed to update assistant order:", error);
-    return false;
-  }
-}
-async function updateUserAssistantList(
-  chosenAssistants: number[]
-): Promise<boolean> {
-  const response = await fetch("/api/user/assistant-list", {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ chosen_assistants: chosenAssistants }),
-  });
-
-  return response.ok;
-}
-
-export async function moveAssistantDown(
-  assistantId: number,
-  chosenAssistants: number[]
-): Promise<boolean> {
-  const index = chosenAssistants.indexOf(assistantId);
-  if (index < chosenAssistants.length - 1) {
-    [chosenAssistants[index + 1], chosenAssistants[index]] = [
-      chosenAssistants[index],
-      chosenAssistants[index + 1],
-    ];
-    return updateUserAssistantList(chosenAssistants);
-  }
-  return false;
-}
-
-export function AssistantsList({ user, assistants }: AssistantsListProps) {
+}) {
   const [filteredAssistants, setFilteredAssistants] = useState(
     orderAssistantsForUser(assistants, user)
   );
@@ -397,7 +352,6 @@ export function AssistantsList({ user, assistants }: AssistantsListProps) {
       setFilteredAssistants((assistants) => {
         const oldIndex = assistants.findIndex((a) => a.id === active.id);
         const newIndex = assistants.findIndex((a) => a.id === over.id);
-
         const newAssistants = arrayMove(assistants, oldIndex, newIndex);
 
         // Update the order in the backend
