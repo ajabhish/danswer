@@ -15,14 +15,6 @@ from shared_configs.configs import INTENT_MODEL_VERSION
 from shared_configs.model_server_models import IntentRequest
 from shared_configs.model_server_models import IntentResponse
 
-logger = setup_logger()
-
-router = APIRouter(prefix="/custom")
-
-_INTENT_TOKENIZER: Optional[AutoTokenizer] = None
-_INTENT_MODEL: Optional[TFDistilBertForSequenceClassification] = None
-
-
 def get_intent_model_tokenizer(
     model_name: str = INTENT_MODEL_VERSION,
 ) -> AutoTokenizer:
