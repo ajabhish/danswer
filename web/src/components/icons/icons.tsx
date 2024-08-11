@@ -143,11 +143,16 @@ export const DexpandTwoIcon = ({
   return (
     <svg
       style={{ width: `${size}px`, height: `${size}px` }}
-      className={`w-[${size}px] h-[${size}px] ` + className}
-      xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 14 14">
-      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m.5 13.5l5-5m-4 0h4v4m8-12l-5 5m4 0h-4v-4" />
+      className={`w-[${size}px] h-[${size}px] ${className}`}
+      xmlns="http://www.w3.org/2000/svg"
+      width="200"
+      height="200"
+      viewBox="0 0 14 14"
+    >
+      <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" d="m.5 13.5l5-5m-4 0h4v4m8-12l-5 5m4 0h-4v-4" />
     </svg>
   );
+};
 };
 
 
